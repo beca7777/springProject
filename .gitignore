@@ -40,3 +40,4 @@ build/
 
 # Generated files by build system
 out/
+/.idea/
