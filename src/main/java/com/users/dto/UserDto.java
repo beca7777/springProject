@@ -1,27 +1,21 @@
-package com.users.entities;
+package com.users.dto;
 
 import com.users.validation.Adult;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 
-@Entity
-@Table(name = "users")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
-@AllArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDto {
     private Long id;
 
     @NotBlank(message = "Email is mandatory")
-    @Column(unique = true)
     @Pattern(regexp = "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g")
     private String email;
 
