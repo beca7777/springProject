@@ -13,10 +13,14 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 public class UserDto {
+
     private Long id;
 
     @NotBlank(message = "Email is mandatory")
-    @Pattern(regexp = "/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g")
+    @Pattern(
+            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
+            message = "Invalid email format"
+    )
     private String email;
 
     @Adult
