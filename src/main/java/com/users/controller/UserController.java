@@ -1,38 +1,45 @@
-package com.users.endpoint;
+package com.users.controller;
 
 import com.users.dto.UserDto;
 import com.users.entities.User;
 import com.users.service.UserService;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/user")
 @Slf4j
-public class UserEndPoint {
+public class UserController {
+
     public final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> createStadium(@RequestBody User user) {
+    public ResponseEntity<UserDto> createUser(@RequestBody User user) {
+        log.info("User to be created {}", user);
         return ResponseEntity.ok(userService.create(user));
     }
 
-    @GetMapping("/all-users")
+    @GetMapping()
     public ResponseEntity<List<UserDto>> findAll() {
+        log.info("REST request to find all users");
         return ResponseEntity.ok(userService.findAllUsers());
     }
 
-    @PostMapping("/update-user")
+    @PostMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+        log.info("Update user with id {}", id);
         return ResponseEntity.ok(userService.updateUser(id, userDto));
     }
 
-    @DeleteMapping("/{user-id}")
-    public ResponseEntity<Void> deleteManager(@PathVariable(name = "user-id") Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        log.info("Delete user with id {}", id);
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

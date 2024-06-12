@@ -13,6 +13,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 public class UserDto {
+
     private Long id;
 
     @NotBlank(message = "Email is mandatory")
