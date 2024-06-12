@@ -1,9 +1,9 @@
 package com.users.controller;
 
 import com.users.dto.UserDto;
-import com.users.entities.User;
+import com.users.mappers.UserMapper;
 import com.users.service.UserService;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class UserController {
     public final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody User user) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
         log.info("User to be created {}", user);
         return ResponseEntity.ok(userService.create(user));
     }
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
         log.info("Update user with id {}", id);
         return ResponseEntity.ok(userService.updateUser(id, userDto));
     }
@@ -42,6 +42,12 @@ public class UserController {
         log.info("Delete user with id {}", id);
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id){
+        log.info("Find user with id {}",id);
+        return ResponseEntity.ok(userService.findUserById(id));
     }
 
 }

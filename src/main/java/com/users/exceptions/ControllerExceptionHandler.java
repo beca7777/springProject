@@ -27,4 +27,13 @@ public class ControllerExceptionHandler {
         response.setErrorCode(HttpStatus.NOT_FOUND.value());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> getException (Exception e) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setTimeStamp(LocalDateTime.now());
+        response.setMessage(e.getMessage());
+        response.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
