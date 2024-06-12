@@ -1,7 +1,6 @@
 package com.users.controller;
 
 import com.users.dto.UserDto;
-import com.users.mappers.UserMapper;
 import com.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

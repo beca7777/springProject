@@ -51,7 +51,7 @@ public class UserService {
     public List<UserDto> findAllUsers() {
         log.debug("Request to get all users");
         List<User> allUsers = userRepository.findAll();
-        return allUsers.stream().map(userMapper::toDto).collect(Collectors.toList());
+        return userMapper.toDto(allUsers);
     }
 
     public void deleteUser(Long id) {
@@ -60,16 +60,14 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User findById(Long id) {
+    public UserDto findUserById(Long id) {
+        log.debug("Find user with id {}", id);
+        return userMapper.toDto(findById(id));
+    }
+
+    private User findById(Long id) {
         log.debug("Find user with id {}", id);
         return userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s doesn't exist", id)));
-    }
-
-    public UserDto findUserById(Long id) {
-        log.debug("Find user with id {}", id);
-        User user = userRepository.findById(id).
-                orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s doesn't exist", id)));
-        return userMapper.toDto(user);
     }
 }
