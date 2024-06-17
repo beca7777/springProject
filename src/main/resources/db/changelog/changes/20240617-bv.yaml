@@ -1,12 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: 1
+      id: 2024-06-17-1
       author: Victor
-      preConditions:
-        onFail: MARK_RAN
-        not:
-          tableExists:
-            tableName: users
       changes:
         - createTable:
             tableName: users
@@ -31,7 +26,7 @@ databaseChangeLog:
                     nullable: false
 
   - changeSet:
-      id: 2
+      id: 2024-06-17-2
       author: Victor
       changes:
         - insert:
@@ -45,7 +40,7 @@ databaseChangeLog:
                   value: "1995-02-20T00:00:00"
 
   - changeSet:
-      id: 3
+      id: 2024-06-17-3
       author: Victor
       changes:
         - insert:
@@ -57,3 +52,33 @@ databaseChangeLog:
               - column:
                   name: date_of_birth
                   value: "1980-05-05T00:00:00"
+
+  - changeSet:
+      id: 2024-06-17-4
+      author: Victor
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: delivery_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
