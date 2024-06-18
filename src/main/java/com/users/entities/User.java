@@ -3,6 +3,7 @@ package com.users.entities;
 import com.users.validation.Adult;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -29,6 +30,6 @@ public class User {
     private String email;
 
     @Adult
-    @NotBlank(message = "Date of birth is mandatory")
+    @NotNull(message = "Date of birth is mandatory")
     private Instant dateOfBirth;
 }

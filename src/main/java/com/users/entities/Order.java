@@ -2,6 +2,7 @@ package com.users.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
@@ -19,10 +20,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Delivery date is mandatory.")
+    @NotNull(message = "Delivery date is mandatory.")
     private Instant deliveryDate;
 
-    @NotBlank(message = "Order date is mandatory.")
+    @NotNull(message = "Order date is mandatory.")
     private Instant orderDate;
 
     @ManyToOne
