@@ -21,8 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Email is mandatory")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     @Pattern(
             regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
             message = "Invalid email format"
@@ -30,6 +29,6 @@ public class User {
     private String email;
 
     @Adult
-    @NotNull(message = "Date of birth is mandatory")
+    @Column(nullable = false)
     private Instant dateOfBirth;
 }

@@ -20,10 +20,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Delivery date is mandatory.")
+    @Column(nullable = false)
     private Instant deliveryDate;
 
-    @NotNull(message = "Order date is mandatory.")
+    @Column(nullable = false)
     private Instant orderDate;
 
     @ManyToOne
