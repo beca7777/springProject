@@ -29,5 +29,6 @@ public class User {
     private String email;
 
     @Adult
+    @NotBlank(message = "Date of birth is mandatory")
     private Instant dateOfBirth;
 }

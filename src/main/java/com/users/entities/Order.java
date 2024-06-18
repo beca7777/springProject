@@ -1,6 +1,7 @@
 package com.users.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
@@ -18,8 +19,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Delivery date is mandatory.")
     private Instant deliveryDate;
 
+    @NotBlank(message = "Order date is mandatory.")
     private Instant orderDate;
 
     @ManyToOne
