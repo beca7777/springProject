@@ -1,6 +1,8 @@
 package com.users.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
@@ -18,8 +20,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Instant deliveryDate;
 
+    @Column(nullable = false)
     private Instant orderDate;
 
     @ManyToOne

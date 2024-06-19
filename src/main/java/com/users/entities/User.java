@@ -3,6 +3,7 @@ package com.users.entities;
 import com.users.validation.Adult;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -20,8 +21,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Email is mandatory")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     @Pattern(
             regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
             message = "Invalid email format"
@@ -29,5 +29,6 @@ public class User {
     private String email;
 
     @Adult
+    @Column(nullable = false)
     private Instant dateOfBirth;
 }
