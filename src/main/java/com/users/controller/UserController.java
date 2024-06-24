@@ -44,9 +44,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id){
-        log.info("Find user with id {}",id);
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        log.info("Find user with id {}", id);
         return ResponseEntity.ok(userService.findUserById(id));
     }
-
 }

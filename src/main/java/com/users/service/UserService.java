@@ -1,5 +1,6 @@
 package com.users.service;
 
+import com.users.dto.RequestDto;
 import com.users.dto.UserDto;
 import com.users.entities.User;
 import com.users.exceptions.EntityAlreadyExistsException;
@@ -9,9 +10,11 @@ import com.users.repository.UserRepository;
 import com.users.util.AdultValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,5 +72,20 @@ public class UserService {
         log.debug("Find user with id {}", id);
         return userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s doesn't exist", id)));
+    }
+
+    public UserDto findByEmail(String email) {
+        User byEmail = userRepository.findByEmail(email);
+        return userMapper.toDto(byEmail);
+    }
+
+    public List<UserDto> findByDateOfBirth(Instant dateOfBirth) {
+        List<User> byDateOfBirth = userRepository.findByDateOfBirth(dateOfBirth);
+        return userMapper.toDto(byDateOfBirth);
+    }
+
+    public List<UserDto> findAllSpecification(Specification<User> userSpecification) {
+        List<User> all = userRepository.findAll(userSpecification);
+        return userMapper.toDto(all);
     }
 }
