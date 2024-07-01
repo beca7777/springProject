@@ -1,5 +1,6 @@
 package com.users.service;
 
+import com.users.dto.RequestDto;
 import com.users.dto.UserDto;
 import com.users.entities.User;
 import com.users.exceptions.EntityAlreadyExistsException;
@@ -9,11 +10,11 @@ import com.users.repository.UserRepository;
 import com.users.util.AdultValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @AllArgsConstructor
@@ -23,6 +24,7 @@ public class UserService {
 
     private UserRepository userRepository;
     private UserMapper userMapper;
+    private FilterSpecificationService<User> filterSpecificationService;
 
     public UserDto create(UserDto user) {
         log.debug("User to be created {}", user);
@@ -60,14 +62,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserDto findUserById(Long id) {
-        log.debug("Find user with id {}", id);
-        return userMapper.toDto(findById(id));
-    }
-
     private User findById(Long id) {
         log.debug("Find user with id {}", id);
         return userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s doesn't exist", id)));
+    }
+
+    public List<UserDto> findAllSpecification(Specification<User> userSpecification) {
+        List<User> all = userRepository.findAll(userSpecification);
+        return userMapper.toDto(all);
+    }
+
+    public List<UserDto> getUsers(RequestDto requestDto) {
+        Specification<User> searchSpecification = filterSpecificationService.getSearchSpecification(requestDto.getSearchRequestDto(), requestDto.getGlobalOperator());
+        List<UserDto> all = findAllSpecification(searchSpecification);
+        return all;
     }
 }
