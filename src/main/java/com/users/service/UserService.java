@@ -14,9 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @AllArgsConstructor
@@ -26,6 +24,7 @@ public class UserService {
 
     private UserRepository userRepository;
     private UserMapper userMapper;
+    private FilterSpecificationService<User> filterSpecificationService;
 
     public UserDto create(UserDto user) {
         log.debug("User to be created {}", user);
@@ -63,29 +62,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public UserDto findUserById(Long id) {
-        log.debug("Find user with id {}", id);
-        return userMapper.toDto(findById(id));
-    }
-
     private User findById(Long id) {
         log.debug("Find user with id {}", id);
         return userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s doesn't exist", id)));
     }
 
-    public UserDto findByEmail(String email) {
-        User byEmail = userRepository.findByEmail(email);
-        return userMapper.toDto(byEmail);
-    }
-
-    public List<UserDto> findByDateOfBirth(Instant dateOfBirth) {
-        List<User> byDateOfBirth = userRepository.findByDateOfBirth(dateOfBirth);
-        return userMapper.toDto(byDateOfBirth);
-    }
-
     public List<UserDto> findAllSpecification(Specification<User> userSpecification) {
         List<User> all = userRepository.findAll(userSpecification);
         return userMapper.toDto(all);
+    }
+
+    public List<UserDto> getUsers(RequestDto requestDto) {
+        Specification<User> searchSpecification = filterSpecificationService.getSearchSpecification(requestDto.getSearchRequestDto(), requestDto.getGlobalOperator());
+        List<UserDto> all = findAllSpecification(searchSpecification);
+        return all;
     }
 }

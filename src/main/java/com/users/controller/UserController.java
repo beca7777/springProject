@@ -1,6 +1,9 @@
 package com.users.controller;
 
+import com.users.dto.RequestDto;
 import com.users.dto.UserDto;
+import com.users.entities.User;
+import com.users.service.FilterSpecificationService;
 import com.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -17,6 +20,7 @@ import java.util.List;
 public class UserController {
 
     public final UserService userService;
+    private FilterSpecificationService<User> filterSpecificationService;
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
@@ -43,9 +47,9 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        log.info("Find user with id {}", id);
-        return ResponseEntity.ok(userService.findUserById(id));
+    @PostMapping("/filter/specification")
+    public ResponseEntity<List<UserDto>> getUsers(@RequestBody RequestDto requestDto) {
+        List<UserDto> users = userService.getUsers(requestDto);
+        return ResponseEntity.ok(users);
     }
 }
