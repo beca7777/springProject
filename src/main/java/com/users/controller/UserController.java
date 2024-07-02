@@ -1,6 +1,7 @@
 package com.users.controller;
 
 import com.users.criteria.UserCriteria;
+import com.users.criteria.UserCriteriaEasy;
 import com.users.dto.UserDto;
 import com.users.service.UserService;
 import jakarta.validation.Valid;
@@ -33,6 +34,12 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<List<UserDto>> findAll(UserCriteria criteria) {
+        log.info("REST request to find all users");
+        return ResponseEntity.ok(userService.findAllUsers(criteria));
+    }
+
+    @GetMapping("/easy")
+    public ResponseEntity<List<UserDto>> findAll(UserCriteriaEasy criteria) {
         log.info("REST request to find all users");
         return ResponseEntity.ok(userService.findAllUsers(criteria));
     }
