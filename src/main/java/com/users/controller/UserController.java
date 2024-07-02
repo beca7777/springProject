@@ -1,12 +1,19 @@
 package com.users.controller;
 
+import com.users.criteria.UserCriteria;
 import com.users.dto.UserDto;
 import com.users.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -25,9 +32,9 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserDto>> findAll() {
+    public ResponseEntity<List<UserDto>> findAll(UserCriteria criteria) {
         log.info("REST request to find all users");
-        return ResponseEntity.ok(userService.findAllUsers());
+        return ResponseEntity.ok(userService.findAllUsers(criteria));
     }
 
     @PostMapping("/{id}")
