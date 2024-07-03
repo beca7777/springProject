@@ -7,13 +7,13 @@ import lombok.Setter;
 @Setter
 public class SearchRequestDto {
 
-    String column;
+    private String column;
 
-    String value;
+    private String value;
 
-    Operation operation;
+    private Operation operation;
 
-    String joinTable;
+    private String joinTable;
 
     public enum Operation {
         EQUAL, LIKE, IN, GREATER_THAN, LESS_THAN, BETWEEN, JOIN;

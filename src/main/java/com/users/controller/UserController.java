@@ -19,8 +19,8 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    public final UserService userService;
-    private FilterSpecificationService<User> filterSpecificationService;
+    private final UserService userService;
+    private final FilterSpecificationService<User> filterSpecificationService;
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto user) {
