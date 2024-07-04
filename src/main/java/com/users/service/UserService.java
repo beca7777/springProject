@@ -1,19 +1,23 @@
 package com.users.service;
 
+import com.users.criteria.UserCriteria;
+import com.users.criteria.UserCriteriaEasy;
 import com.users.dto.UserDto;
 import com.users.entities.User;
 import com.users.exceptions.EntityAlreadyExistsException;
 import com.users.exceptions.EntityNotFoundException;
 import com.users.mappers.UserMapper;
 import com.users.repository.UserRepository;
+import com.users.specification.UserSpecification;
+import com.users.specification.UserSpecificationV2;
 import com.users.util.AdultValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @AllArgsConstructor
@@ -48,10 +52,16 @@ public class UserService {
         return userMapper.toDto(savedUser);
     }
 
-    public List<UserDto> findAllUsers() {
+    public List<UserDto> findAllUsers(UserCriteria criteria) {
         log.debug("Request to get all users");
-        List<User> allUsers = userRepository.findAll();
-        return userMapper.toDto(allUsers);
+        Specification<User> searchSpecification = new UserSpecification(criteria);
+        return userMapper.toDto(userRepository.findAll(searchSpecification));
+    }
+
+    public List<UserDto> findAllUsers(UserCriteriaEasy criteria) {
+        log.debug("Request to get all users");
+        Specification<User> searchSpecification = UserSpecificationV2.createSpecification(criteria);
+        return userMapper.toDto(userRepository.findAll(searchSpecification));
     }
 
     public void deleteUser(Long id) {
