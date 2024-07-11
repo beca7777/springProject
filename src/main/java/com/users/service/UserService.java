@@ -1,22 +1,24 @@
 package com.users.service;
 
-import com.users.dto.RequestDto;
+import com.users.criteria.UserCriteria;
+import com.users.criteria.UserCriteriaEasy;
+import com.users.dto.PageRequestDto;
 import com.users.dto.UserDto;
 import com.users.entities.User;
 import com.users.exceptions.EntityAlreadyExistsException;
 import com.users.exceptions.EntityNotFoundException;
 import com.users.mappers.UserMapper;
 import com.users.repository.UserRepository;
+import com.users.specification.UserSpecification;
+import com.users.specification.UserSpecificationV2;
 import com.users.util.AdultValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @AllArgsConstructor
@@ -51,10 +53,21 @@ public class UserService {
         return userMapper.toDto(savedUser);
     }
 
-    public List<UserDto> findAllUsers() {
+    public Page<UserDto> findAllUsers(UserCriteria criteria) {
         log.debug("Request to get all users");
-        List<User> allUsers = userRepository.findAll();
-        return userMapper.toDto(allUsers);
+        Specification<User> searchSpecification = new UserSpecification(criteria);
+        if (criteria.getPageRequestDto() == null) {
+            criteria.setPageRequestDto(new PageRequestDto());
+        }
+        Pageable pageable = criteria.getPageRequestDto().getPageable(criteria.getPageRequestDto());
+        return userRepository.findAll(searchSpecification,pageable).map(userMapper::toDto);
+    }
+
+    public Page<UserDto> findAllUsers(UserCriteriaEasy criteria,PageRequestDto pageRequestDto) {
+        log.debug("Request to get all users");
+        Specification<User> searchSpecification = UserSpecificationV2.createSpecification(criteria);
+        Pageable pageable = pageRequestDto.getPageable(pageRequestDto);
+        return userRepository.findAll(searchSpecification,pageable).map(userMapper::toDto);
     }
 
     public void deleteUser(Long id) {
@@ -72,20 +85,5 @@ public class UserService {
         log.debug("Find user with id {}", id);
         return userRepository.findById(id).
                 orElseThrow(() -> new EntityNotFoundException(String.format("User with id %s doesn't exist", id)));
-    }
-
-    public UserDto findByEmail(String email) {
-        User byEmail = userRepository.findByEmail(email);
-        return userMapper.toDto(byEmail);
-    }
-
-    public List<UserDto> findByDateOfBirth(Instant dateOfBirth) {
-        List<User> byDateOfBirth = userRepository.findByDateOfBirth(dateOfBirth);
-        return userMapper.toDto(byDateOfBirth);
-    }
-
-    public List<UserDto> findAllSpecification(Specification<User> userSpecification) {
-        List<User> all = userRepository.findAll(userSpecification);
-        return userMapper.toDto(all);
     }
 }
