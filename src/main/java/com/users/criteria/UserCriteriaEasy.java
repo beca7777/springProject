@@ -10,5 +10,6 @@ import java.time.Instant;
 public class UserCriteriaEasy {
 
     private String email;
+
     private Instant dateOfBirth;
 }

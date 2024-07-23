@@ -8,7 +8,10 @@ import java.util.List;
 @Getter
 @Setter
 public class StringFilter {
+
     private String equals;
+
     private String contains;
+
     private List<String> in;
 }

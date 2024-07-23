@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-10-1
+      author: Victor
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "becalarisa@yahoo.com"
+              - column:
+                  name: date_of_birth
+                  value: "1993-08-13T00:00:00"
+  - changeSet:
+      id: 2024-07-10-2
+      author: Victor
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "mihai@yahoo.com"
+              - column:
+                  name: date_of_birth
+                  value: "1992-05-29T00:00:00"
+  - changeSet:
+      id: 2024-07-10-3
+      author: Victor
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "adrian@yahoo.com"
+              - column:
+                  name: date_of_birth
+                  value: "1989-09-07T00:00:00"
+  - changeSet:
+      id: 2024-07-10-4
+      author: Victor
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "ioana@yahoo.com"
+              - column:
+                  name: date_of_birth
+                  value: "1982-10-10T00:00:00"
