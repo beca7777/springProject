@@ -13,7 +13,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDto {
+public class UserDto extends AuditorDto {
 
     private Long id;
 

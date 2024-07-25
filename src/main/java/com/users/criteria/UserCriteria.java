@@ -10,5 +10,6 @@ import lombok.Setter;
 public class UserCriteria {
 
     private StringFilter email;
+
     private InstantFilter dateOfBirth;
 }

@@ -12,9 +12,4 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     boolean existsByEmail(String email);
-
-    User findByEmail(String email);
-
-    List<User> findByDateOfBirth(Instant dateOfBirth);
-
 }
