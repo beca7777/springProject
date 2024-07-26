@@ -14,11 +14,17 @@ public class UserSpecificationV2 {
         Specification<User> specification = Specification.where(null);
 
         if (Objects.nonNull(userCriteria)) {
-            if (Objects.nonNull(userCriteria.getEmail()) && StringUtils.hasText(userCriteria.getEmail())) {
-                specification = specification.and(hasName(userCriteria.getEmail()));
+            if (Objects.nonNull(userCriteria.getPrimaryEmail()) && StringUtils.hasText(userCriteria.getPrimaryEmail())) {
+                specification = specification.and(hasPrimaryEmail(userCriteria.getPrimaryEmail()));
             }
             if (Objects.nonNull(userCriteria.getDateOfBirth())) {
                 specification = specification.and(hasDateOfBirth(userCriteria.getDateOfBirth()));
+            }
+            if(Objects.nonNull(userCriteria.getPhoneNumber()) && StringUtils.hasText(userCriteria.getPhoneNumber())){
+                specification = specification.and(hasPhoneNumber(userCriteria.getPhoneNumber()));
+            }
+            if(Objects.nonNull(userCriteria.getSecondaryEmail()) && StringUtils.hasText((userCriteria.getSecondaryEmail()))){
+                specification =  specification.and(hasSecondaryEmail(userCriteria.getSecondaryEmail()));
             }
         }
 
@@ -29,8 +35,17 @@ public class UserSpecificationV2 {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("dateOfBirth"), dateOfBirth);
     }
 
-    private static Specification<User> hasName(String name) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("email"), name);
+    private static Specification<User> hasPrimaryEmail(String primaryEmail) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("primaryEmail"), primaryEmail);
     }
+
+    private static Specification<User> hasPhoneNumber(String phoneNumber){
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("phoneNumber"), phoneNumber);
+    }
+
+    private static Specification<User> hasSecondaryEmail(String secondaryEmail){
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("secondaryEmail"), secondaryEmail);
+    }
+
 }
 

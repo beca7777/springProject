@@ -9,7 +9,11 @@ import lombok.Setter;
 @Setter
 public class UserCriteria {
 
-    private StringFilter email;
+    private StringFilter primaryEmail;
 
     private InstantFilter dateOfBirth;
+
+    private StringFilter phoneNumber;
+
+    private StringFilter secondaryEmail;
 }
