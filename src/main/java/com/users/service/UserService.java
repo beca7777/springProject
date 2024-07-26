@@ -2,7 +2,6 @@ package com.users.service;
 
 import com.users.criteria.UserCriteria;
 import com.users.criteria.UserCriteriaEasy;
-import com.users.dto.PageRequestDto;
 import com.users.dto.UserDto;
 import com.users.entities.User;
 import com.users.exceptions.EntityAlreadyExistsException;
@@ -53,21 +52,16 @@ public class UserService {
         return userMapper.toDto(savedUser);
     }
 
-    public Page<UserDto> findAllUsers(UserCriteria criteria) {
+    public Page<UserDto> findAllUsers(UserCriteria criteria, Pageable pageable) {
         log.debug("Request to get all users");
         Specification<User> searchSpecification = new UserSpecification(criteria);
-        if (criteria.getPageRequestDto() == null) {
-            criteria.setPageRequestDto(new PageRequestDto());
-        }
-        Pageable pageable = criteria.getPageRequestDto().getPageable(criteria.getPageRequestDto());
-        return userRepository.findAll(searchSpecification,pageable).map(userMapper::toDto);
+        return userRepository.findAll(searchSpecification, pageable).map(userMapper::toDto);
     }
 
-    public Page<UserDto> findAllUsers(UserCriteriaEasy criteria,PageRequestDto pageRequestDto) {
+    public Page<UserDto> findAllUsers(UserCriteriaEasy criteria, Pageable pageable) {
         log.debug("Request to get all users");
         Specification<User> searchSpecification = UserSpecificationV2.createSpecification(criteria);
-        Pageable pageable = pageRequestDto.getPageable(pageRequestDto);
-        return userRepository.findAll(searchSpecification,pageable).map(userMapper::toDto);
+        return userRepository.findAll(searchSpecification, pageable).map(userMapper::toDto);
     }
 
     public void deleteUser(Long id) {
