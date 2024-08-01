@@ -23,15 +23,15 @@ public class UserSpecification implements Specification<User> {
     public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if (criteria.getEmail() != null) {
-            if (criteria.getEmail().getEquals() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("email"), criteria.getEmail().getEquals()));
+        if (criteria.getPrimaryEmail() != null) {
+            if (criteria.getPrimaryEmail().getEquals() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("primaryEmail"), criteria.getPrimaryEmail().getEquals()));
             }
-            if (criteria.getEmail().getContains() != null) {
-                predicates.add(criteriaBuilder.like(root.get("email"), "%" + criteria.getEmail().getContains() + "%"));
+            if (criteria.getPrimaryEmail().getContains() != null) {
+                predicates.add(criteriaBuilder.like(root.get("primaryEmail"), "%" + criteria.getPrimaryEmail().getContains() + "%"));
             }
-            if (criteria.getEmail().getIn() != null && !criteria.getEmail().getIn().isEmpty()) {
-                predicates.add(root.get("email").in(criteria.getEmail().getIn()));
+            if (criteria.getPrimaryEmail().getIn() != null && !criteria.getPrimaryEmail().getIn().isEmpty()) {
+                predicates.add(root.get("primaryEmail").in(criteria.getPrimaryEmail().getIn()));
             }
         }
 
@@ -50,6 +50,30 @@ public class UserSpecification implements Specification<User> {
             }
             if (criteria.getDateOfBirth().getLessThanOrEqualTo() != null) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dateOfBirth"), criteria.getDateOfBirth().getLessThanOrEqualTo()));
+            }
+        }
+
+        if (criteria.getSecondaryEmail() != null) {
+            if (criteria.getSecondaryEmail().getEquals() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("secondaryEmails"), criteria.getSecondaryEmail().getEquals()));
+            }
+            if (criteria.getSecondaryEmail().getContains() != null) {
+                predicates.add(criteriaBuilder.like(root.get("secondaryEmails"), "%" + criteria.getSecondaryEmail().getContains() + "%"));
+            }
+            if (criteria.getSecondaryEmail().getIn() != null && !criteria.getSecondaryEmail().getIn().isEmpty()) {
+                predicates.add(root.get("secondaryEmails").in(criteria.getSecondaryEmail().getIn()));
+            }
+        }
+
+        if (criteria.getPhoneNumber() != null) {
+            if (criteria.getPhoneNumber().getEquals() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("phoneNumber"), criteria.getPhoneNumber().getEquals()));
+            }
+            if (criteria.getPhoneNumber().getContains() != null) {
+                predicates.add(criteriaBuilder.like(root.get("phoneNumber"), "%" + criteria.getPhoneNumber().getContains() + "%"));
+            }
+            if (criteria.getPhoneNumber().getIn() != null && !criteria.getPhoneNumber().getIn().isEmpty()) {
+                predicates.add(root.get("phoneNumber").in(criteria.getPhoneNumber().getIn()));
             }
         }
 
