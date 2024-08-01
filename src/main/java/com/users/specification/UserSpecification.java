@@ -55,13 +55,13 @@ public class UserSpecification implements Specification<User> {
 
         if (criteria.getSecondaryEmail() != null) {
             if (criteria.getSecondaryEmail().getEquals() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("secondaryEmail"), criteria.getSecondaryEmail().getEquals()));
+                predicates.add(criteriaBuilder.equal(root.get("secondaryEmails"), criteria.getSecondaryEmail().getEquals()));
             }
             if (criteria.getSecondaryEmail().getContains() != null) {
-                predicates.add(criteriaBuilder.like(root.get("secondaryEmail"), "%" + criteria.getSecondaryEmail().getContains() + "%"));
+                predicates.add(criteriaBuilder.like(root.get("secondaryEmails"), "%" + criteria.getSecondaryEmail().getContains() + "%"));
             }
             if (criteria.getSecondaryEmail().getIn() != null && !criteria.getSecondaryEmail().getIn().isEmpty()) {
-                predicates.add(root.get("secondaryEmail").in(criteria.getSecondaryEmail().getIn()));
+                predicates.add(root.get("secondaryEmails").in(criteria.getSecondaryEmail().getIn()));
             }
         }
 

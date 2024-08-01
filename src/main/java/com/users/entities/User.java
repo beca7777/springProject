@@ -1,10 +1,12 @@
 package com.users.entities;
 
+import com.users.config.SecondaryEmailsConvertor;
 import com.users.validation.Adult;
 import com.users.validation.ValidEmailList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import java.time.Instant;
 import java.util.List;
@@ -28,10 +30,12 @@ public class User extends AuditorEntity {
     )
     private String primaryEmail;
 
+    @Convert(converter = SecondaryEmailsConvertor.class)
+    @Column(columnDefinition = "json")
     @ValidEmailList
-    private List<String> secondaryEmail;
+    private List<String> secondaryEmails;
 
-    @Column(unique = true,nullable = false)
+    @Column(length = 15, nullable = false)
     @Pattern(
             regexp = "^(\\+4|)?(07[0-9]{8}|02[0-9]{8}|03[0-9]{8})$",
             message = "Invalid Romanian phone number"

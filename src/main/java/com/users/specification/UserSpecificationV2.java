@@ -23,8 +23,8 @@ public class UserSpecificationV2 {
             if(Objects.nonNull(userCriteria.getPhoneNumber()) && StringUtils.hasText(userCriteria.getPhoneNumber())){
                 specification = specification.and(hasPhoneNumber(userCriteria.getPhoneNumber()));
             }
-            if(Objects.nonNull(userCriteria.getSecondaryEmail()) && StringUtils.hasText((userCriteria.getSecondaryEmail()))){
-                specification =  specification.and(hasSecondaryEmail(userCriteria.getSecondaryEmail()));
+            if(Objects.nonNull(userCriteria.getSecondaryEmail()) && StringUtils.hasText((userCriteria.getSecondaryEmail()))) {
+                specification = specification.and(hasSecondaryEmail(userCriteria.getSecondaryEmail()));
             }
         }
 
@@ -44,8 +44,8 @@ public class UserSpecificationV2 {
     }
 
     private static Specification<User> hasSecondaryEmail(String secondaryEmail){
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("secondaryEmail"), secondaryEmail);
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(root.get("secondaryEmails"), "%" + secondaryEmail + "%");
     }
 
 }
-

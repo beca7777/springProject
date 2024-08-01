@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,7 +26,7 @@ public class UserDto extends AuditorDto {
     )
     private String primaryEmail;
 
-    private List<String> secondaryEmail;
+    private List<String> secondaryEmails = new ArrayList<>();
 
     @NotNull(message = "Phone number is mandatory")
     @Pattern(

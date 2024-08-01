@@ -17,7 +17,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: secondary_email
+                  name: secondary_emails
                   type: VARCHAR(255)
                   constraints:
                     nullable: true
