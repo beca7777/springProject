@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
-    boolean existsByEmail(String email);
+    boolean existsByPrimaryEmail(String email);
 }

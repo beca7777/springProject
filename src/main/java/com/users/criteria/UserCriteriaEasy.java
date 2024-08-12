@@ -9,7 +9,11 @@ import java.time.Instant;
 @Setter
 public class UserCriteriaEasy {
 
-    private String email;
+    private String primaryEmail;
 
     private Instant dateOfBirth;
+
+    private String phoneNumber;
+
+    private String secondaryEmail;
 }

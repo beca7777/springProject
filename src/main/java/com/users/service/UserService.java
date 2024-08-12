@@ -33,8 +33,8 @@ public class UserService {
         if (!AdultValidator.validateDateOfBirth(user.getDateOfBirth())) {
             throw new IllegalArgumentException("User must be 18 years old");
         }
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EntityAlreadyExistsException(String.format("User with email %s already exists", user.getEmail()));
+        if (userRepository.existsByPrimaryEmail(user.getPrimaryEmail())) {
+            throw new EntityAlreadyExistsException(String.format("User with email %s already exists", user.getPrimaryEmail()));
         }
         User userEntity = userMapper.toEntity(user);
         User savedUser = userRepository.save(userEntity);

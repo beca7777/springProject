@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2024-07-25-1
+      author: Victor
+      changes:
+        - renameColumn:
+            tableName: users
+            oldColumnName: email
+            newColumnName: primary_email
+            columnDataType: VARCHAR(255)
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: phone_number
+                  type: VARCHAR(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: secondary_emails
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
