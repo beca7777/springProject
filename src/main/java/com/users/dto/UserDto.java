@@ -1,5 +1,6 @@
 package com.users.dto;
 
+import com.users.constants.RegexConstants;
 import com.users.validation.Adult;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ public class UserDto extends AuditorDto {
 
     @NotBlank(message = "Email is mandatory")
     @Pattern(
-            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
+            regexp = RegexConstants.EMAIL_REGEX,
             message = "Invalid email format"
     )
     private String primaryEmail;

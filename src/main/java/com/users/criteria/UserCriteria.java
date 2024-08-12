@@ -15,5 +15,5 @@ public class UserCriteria {
 
     private StringFilter phoneNumber;
 
-    private StringFilter secondaryEmail;
+    private StringFilter secondaryEmails;
 }

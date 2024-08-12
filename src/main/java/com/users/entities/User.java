@@ -1,12 +1,12 @@
 package com.users.entities;
 
 import com.users.config.SecondaryEmailsConvertor;
+import com.users.constants.RegexConstants;
 import com.users.validation.Adult;
 import com.users.validation.ValidEmailList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-import org.hibernate.annotations.Type;
 
 import java.time.Instant;
 import java.util.List;
@@ -25,7 +25,7 @@ public class User extends AuditorEntity {
 
     @Column(unique = true, nullable = false)
     @Pattern(
-            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
+            regexp = RegexConstants.EMAIL_REGEX,
             message = "Invalid email format"
     )
     private String primaryEmail;
