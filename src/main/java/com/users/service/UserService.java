@@ -36,6 +36,12 @@ public class UserService {
         if (userRepository.existsByPrimaryEmail(user.getPrimaryEmail())) {
             throw new EntityAlreadyExistsException(String.format("User with email %s already exists", user.getPrimaryEmail()));
         }
+        for(String userSecondaryEmail : user.getSecondaryEmails()){
+            if(userRepository.existsByPrimaryEmail(userSecondaryEmail)){
+                throw new EntityAlreadyExistsException((String.format("Secondary email %s already exists as primary", userSecondaryEmail)));
+            }
+        }
+
         User userEntity = userMapper.toEntity(user);
         User savedUser = userRepository.save(userEntity);
         return userMapper.toDto(savedUser);
