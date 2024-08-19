@@ -40,6 +40,9 @@ public class UserService {
             if(userRepository.existsByPrimaryEmail(userSecondaryEmail)){
                 throw new EntityAlreadyExistsException((String.format("Secondary email %s already exists as primary", userSecondaryEmail)));
             }
+            if(userSecondaryEmail.equals(user.getPrimaryEmail())){
+                throw new EntityAlreadyExistsException((String.format("Secondary email %s already exists as primary", userSecondaryEmail)));
+            }
         }
 
         User userEntity = userMapper.toEntity(user);
