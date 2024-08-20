@@ -19,6 +19,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @AllArgsConstructor
 @Service
@@ -36,14 +38,21 @@ public class UserService {
         if (userRepository.existsByPrimaryEmail(user.getPrimaryEmail())) {
             throw new EntityAlreadyExistsException(String.format("User with email %s already exists", user.getPrimaryEmail()));
         }
-        for(String userSecondaryEmail : user.getSecondaryEmails()){
-            if(userRepository.existsByPrimaryEmail(userSecondaryEmail)){
-                throw new EntityAlreadyExistsException((String.format("Secondary email %s already exists as primary", userSecondaryEmail)));
-            }
-            if(userSecondaryEmail.equals(user.getPrimaryEmail())){
-                throw new EntityAlreadyExistsException((String.format("Secondary email %s already exists as primary", userSecondaryEmail)));
-            }
-        }
+//        for(String userSecondaryEmail : user.getSecondaryEmails()){
+//            if(userSecondaryEmail.equals(user.getPrimaryEmail())){
+//                throw new EntityAlreadyExistsException((String.format("Secondary email %s is same as primary", userSecondaryEmail)));
+//            }
+//            if(userRepository.existsByPrimaryEmail(userSecondaryEmail)){
+//                throw new EntityAlreadyExistsException((String.format("Secondary email %s already exists as primary", userSecondaryEmail)));
+//            }
+//        }
+        List<String> secondaryEmails = user.getSecondaryEmails();
+        secondaryEmails.stream().filter(p -> p.equals(user.getPrimaryEmail())).findAny().ifPresent(s -> {
+            throw new EntityAlreadyExistsException(String.format("Secondary email %s is same as primary", s));
+        });
+        secondaryEmails.stream().filter(userRepository::existsByPrimaryEmail).findAny().ifPresent(p -> {
+            throw new EntityAlreadyExistsException(String.format("Secondary email %s already exists as primary", p));
+        });
 
         User userEntity = userMapper.toEntity(user);
         User savedUser = userRepository.save(userEntity);
