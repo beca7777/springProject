@@ -12,7 +12,13 @@ import java.util.List;
 
 public class UserUtilityTest {
 
-    private static final String mail = "@yahoo.com";
+    private static final String MAIL = "@yahoo.com";
+
+    private static final int LENGTH = 8;
+
+    private static final boolean USE_LETTERS = true;
+
+    private static final boolean USE_NUMBERS = false;
 
     public static List<User> createUsersEntity(int number) {
         List<User> users = new ArrayList<>();
@@ -20,8 +26,8 @@ public class UserUtilityTest {
             User user = createUserEntity();
             user.setId(user.getId() + i);
             user.setDateOfBirth(user.getDateOfBirth().minus(Duration.ofDays(i)));
-            user.setPrimaryEmail(generateString() + i + mail);
-            user.setSecondaryEmails(List.of(generateString() + i + mail));
+            user.setPrimaryEmail(generateString() + i + MAIL);
+            user.setSecondaryEmails(List.of(generateString() + i + MAIL));
 
             users.add(user);
         }
@@ -32,8 +38,8 @@ public class UserUtilityTest {
         User user = new User();
         user.setId(1L);
         user.setDateOfBirth(Instant.parse("1995-02-20T14:30:00Z"));
-        user.setPrimaryEmail(generateString() + mail);
-        user.setSecondaryEmails(List.of(generateString() + mail));
+        user.setPrimaryEmail(generateString() + MAIL);
+        user.setSecondaryEmails(List.of(generateString() + MAIL));
         return user;
     }
 
@@ -43,8 +49,8 @@ public class UserUtilityTest {
             UserDto userDto = createUserDto();
             userDto.setId(userDto.getId() + i);
             userDto.setDateOfBirth(userDto.getDateOfBirth().minus(Duration.ofDays(i)));
-            userDto.setPrimaryEmail(generateString() + i + mail);
-            userDto.setSecondaryEmails(List.of(generateString() + i + mail));
+            userDto.setPrimaryEmail(generateString() + i + MAIL);
+            userDto.setSecondaryEmails(List.of(generateString() + i + MAIL));
 
             usersDto.add(userDto);
         }
@@ -55,15 +61,12 @@ public class UserUtilityTest {
         UserDto userDto = new UserDto();
         userDto.setId(1L);
         userDto.setDateOfBirth(Instant.parse("1995-02-20T14:30:00Z"));
-        userDto.setPrimaryEmail(generateString() + mail);
-        userDto.setSecondaryEmails(List.of(generateString() + mail));
+        userDto.setPrimaryEmail(generateString() + MAIL);
+        userDto.setSecondaryEmails(List.of(generateString() + MAIL));
         return userDto;
     }
 
     public static String generateString() {
-        int length = 8;
-        boolean useLetters = true;
-        boolean useNumbers = false;
-        return RandomStringUtils.random(length, useLetters, useNumbers);
+        return RandomStringUtils.random(LENGTH, USE_LETTERS, USE_NUMBERS);
     }
 }

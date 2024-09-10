@@ -9,6 +9,7 @@ import com.users.mappers.UserMapper;
 import com.users.repository.UserRepository;
 import com.users.utility.UserUtilityTest;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -44,18 +45,20 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
+    @DisplayName("Should create an user when given valid data")
     public void whenSaveUser_shouldReturnUser() {
-        List<UserDto> usersDto = UserUtilityTest.createUsersDto(1);
-        UserDto userDto = usersDto.get(0);
+        UserDto userDto = UserUtilityTest.createUserDto();
 
         User user = new User();
         user.setDateOfBirth(userDto.getDateOfBirth());
         user.setPrimaryEmail(userDto.getPrimaryEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
 
+        when(userRepository.existsByPrimaryEmail(user.getPrimaryEmail())).thenReturn(false);
+        when(userRepository.existsByPrimaryEmail(userDto.getSecondaryEmails().get(0))).thenReturn(false);
         when(userMapper.toEntity(userDto)).thenReturn(user);
-        when(userMapper.toDto(user)).thenReturn(userDto);
         when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userMapper.toDto(user)).thenReturn(userDto);
 
         UserDto createdDto = userService.create(userDto);
 
@@ -67,18 +70,18 @@ public class UserServiceTest {
     }
 
     @Test(expected = EntityAlreadyExistsException.class)
+    @DisplayName("Should throw exception when creating an user with secondary email same as primary")
     public void whenCreateUser_withPrimaryEmailInSecondaryEmails_shouldThrowException() {
-        List<UserDto> usersDto = UserUtilityTest.createUsersDto(1);
-        UserDto userDto = usersDto.get(0);
+        UserDto userDto = UserUtilityTest.createUserDto();
         userDto.setSecondaryEmails(Arrays.asList(userDto.getPrimaryEmail(), "another@yahoo.com"));
 
         userService.create(userDto);
     }
 
     @Test(expected = EntityAlreadyExistsException.class)
+    @DisplayName("Should throw exception when creating an user with secondary email same as another primary email")
     public void whenCreateUser_withSecondaryEmailAlreadyExistingAsPrimary_shouldThrowException() {
-        List<UserDto> usersDto = UserUtilityTest.createUsersDto(1);
-        UserDto userDto = usersDto.get(0);
+        UserDto userDto = UserUtilityTest.createUserDto();
         userDto.setSecondaryEmails(List.of("existing@yahoo.com"));
 
         when(userRepository.existsByPrimaryEmail("existing@yahoo.com")).thenReturn(true);
@@ -87,9 +90,9 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should delete the user found by id")
     public void whenGivenId_shouldDeleteUser_ifFound() {
-        List<User> usersEntity = UserUtilityTest.createUsersEntity(1);
-        User userEntity = usersEntity.get(0);
+        User userEntity = UserUtilityTest.createUserEntity();
 
         when(userRepository.findById(userEntity.getId())).thenReturn(Optional.of(userEntity));
 
@@ -99,6 +102,7 @@ public class UserServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
+    @DisplayName("Should throw an error if user can t be found by id")
     public void whenDeleteUser_shouldThrowException_ifUserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -106,6 +110,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should return all users")
     public void shouldReturnAllUsers() {
         UserCriteriaEasy criteria = new UserCriteriaEasy();
         Pageable pageable = PageRequest.of(0, 10);
@@ -136,10 +141,11 @@ public class UserServiceTest {
         Page<UserDto> result = userService.findAllUsers(criteria, pageable);
 
         assertThat(result.getTotalElements()).isEqualTo(2);
-        assertThat(result.getContent().size()).isEqualTo(2);
+        assertThat(result.getContent()).hasSize(2);
     }
 
     @Test
+    @DisplayName("Should return an empty page if there are no users")
     public void whenFindAllUsers_withNoMatchingUsers_shouldReturnEmptyPage() {
         UserCriteriaEasy criteria = new UserCriteriaEasy();
         Pageable pageable = PageRequest.of(0, 10);
@@ -154,9 +160,9 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should return userDto when searching user by id")
     public void whenFindUserById_shouldReturnUserDto_ifFound() {
-        List<User> usersEntity = UserUtilityTest.createUsersEntity(1);
-        User userEntity = usersEntity.get(0);
+        User userEntity = UserUtilityTest.createUserEntity();
 
         UserDto userDto = new UserDto();
         userDto.setId(userEntity.getId());
@@ -173,6 +179,7 @@ public class UserServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
+    @DisplayName("Should throw exception when user can't be found by id")
     public void whenFindUserById_shouldThrowException_ifNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -180,12 +187,10 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should update the user if found")
     public void whenGivenId_shouldUpdateUser_ifFound() {
-        List<User> usersEntity = UserUtilityTest.createUsersEntity(1);
-        User userEntity = usersEntity.get(0);
-
-        List<UserDto> usersDto = UserUtilityTest.createUsersDto(1);
-        UserDto userDto1 = usersDto.get(0);
+        User userEntity = UserUtilityTest.createUserEntity();
+        UserDto userDto1 = UserUtilityTest.createUserDto();
 
         given(userRepository.findById(userEntity.getId())).willReturn(Optional.of(userEntity));
 
@@ -203,19 +208,19 @@ public class UserServiceTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
+    @DisplayName("Should throw exception when updating an user with non existing user")
     public void whenUpdateUser_withNonExistingUser_shouldThrowEntityNotFoundException() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        List<UserDto> usersDto = UserUtilityTest.createUsersDto(1);
-        UserDto userDto1 = usersDto.get(0);
+        UserDto userDto1 = UserUtilityTest.createUserDto();
 
         userService.updateUser(89L, userDto1);
     }
 
     @Test(expected = EntityAlreadyExistsException.class)
+    @DisplayName("Should throw exception when updating an user with an existing primary email")
     public void whenUpdateUser_withExistingPrimaryEmail_shouldThrowEntityAlreadyExistsException() {
-        List<UserDto> usersDto = UserUtilityTest.createUsersDto(1);
-        UserDto userDto1 = usersDto.get(0);
+        UserDto userDto1 = UserUtilityTest.createUserDto();
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
         when(userRepository.existsByPrimaryEmail(userDto1.getPrimaryEmail())).thenReturn(true);
@@ -224,6 +229,7 @@ public class UserServiceTest {
     }
 
     @Test(expected = EntityAlreadyExistsException.class)
+    @DisplayName("Should throw exception when updating an user with secondary email same as primary")
     public void whenUpdateUser_withSecondaryEmailSameAsPrimary_shouldThrowEntityAlreadyExistsException() {
         UserDto userDto = new UserDto();
         userDto.setPrimaryEmail("newprimary@yahoo.com");
