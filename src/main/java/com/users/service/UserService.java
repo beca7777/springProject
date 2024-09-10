@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Transactional
 @AllArgsConstructor
@@ -35,17 +36,9 @@ public class UserService {
         if (!AdultValidator.validateDateOfBirth(user.getDateOfBirth())) {
             throw new IllegalArgumentException("User must be 18 years old");
         }
-        if (userRepository.existsByPrimaryEmail(user.getPrimaryEmail())) {
+        if (isExistsByPrimaryEmail(user)) {
             throw new EntityAlreadyExistsException(String.format("User with email %s already exists", user.getPrimaryEmail()));
         }
-//        for(String userSecondaryEmail : user.getSecondaryEmails()){
-//            if(userSecondaryEmail.equals(user.getPrimaryEmail())){
-//                throw new EntityAlreadyExistsException((String.format("Secondary email %s is same as primary", userSecondaryEmail)));
-//            }
-//            if(userRepository.existsByPrimaryEmail(userSecondaryEmail)){
-//                throw new EntityAlreadyExistsException((String.format("Secondary email %s already exists as primary", userSecondaryEmail)));
-//            }
-//        }
         List<String> secondaryEmails = user.getSecondaryEmails();
         secondaryEmails.stream().filter(p -> p.equals(user.getPrimaryEmail())).findAny().ifPresent(s -> {
             throw new EntityAlreadyExistsException(String.format("Secondary email %s is same as primary", s));
@@ -65,9 +58,25 @@ public class UserService {
             throw new IllegalArgumentException("User must be 18 years old");
         }
         User user = findById(id);
+        if(isExistsByPrimaryEmail(userDto)){
+            throw new EntityAlreadyExistsException(String.format("User with email %s already exists", userDto.getPrimaryEmail()));
+        }
+        List<String> secondaryEmails = user.getSecondaryEmails();
+        if(Objects.nonNull(secondaryEmails)){
+            secondaryEmails.stream().filter(p -> p.equals(userDto.getPrimaryEmail())).findAny().ifPresent(s -> {
+                throw new EntityAlreadyExistsException(String.format("Secondary email %s is same as primary", s));
+            });
+            secondaryEmails.stream().filter(userRepository::existsByPrimaryEmail).findAny().ifPresent(p -> {
+                throw new EntityAlreadyExistsException(String.format("Secondary email %s already exists as primary", p));
+            });
+        }
         userMapper.updateEntity(user, userDto);
         User savedUser = userRepository.save(user);
         return userMapper.toDto(savedUser);
+    }
+
+    private boolean isExistsByPrimaryEmail(UserDto userDto) {
+        return userRepository.existsByPrimaryEmail(userDto.getPrimaryEmail());
     }
 
     public Page<UserDto> findAllUsers(UserCriteria criteria, Pageable pageable) {
